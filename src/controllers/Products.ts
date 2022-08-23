@@ -26,7 +26,6 @@ const ProductsController = () => {
   const getAll = async (req: Request, res: Response) => {
     try {
       const products = await _service.getAll();
-      console.log(req.cookies, req.signedCookies);
       return res.json(products);
     } catch (error: any) {
       return res.status(500).json({
