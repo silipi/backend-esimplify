@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 import ProvidersController from '../controllers/Providers';
 
-import { authorization, schemaValidator } from '../middlewares';
+import { authentication, authorization, schemaValidator } from '../middlewares';
 import { providersSchemas } from '../schemas';
 
 const controller = ProvidersController();
@@ -35,7 +35,7 @@ router.delete(
 router.get(
   '/:id/products',
   schemaValidator(providersSchemas.paramId),
-  authorization('PROVIDER'),
+  authentication,
   controller.getProducts
 );
 
