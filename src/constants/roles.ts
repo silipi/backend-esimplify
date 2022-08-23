@@ -1,13 +1,15 @@
 const ROLES = {
-  ADMIN: 'admin',
-  PROVIDER: 'provider',
-  CLIENT: 'client',
+  CLIENT_ONLY: 'CLIENT_ONLY',
+  ADMIN: 'ADMIN',
+  PROVIDER: 'PROVIDER',
+  ALL: 'ALL',
 };
 
 const ROLES_WEIGHTS = {
+  [ROLES.CLIENT_ONLY]: 9999,
   [ROLES.ADMIN]: 3,
   [ROLES.PROVIDER]: 2,
-  [ROLES.CLIENT]: 1,
+  [ROLES.ALL]: 1,
 };
 
 export { ROLES, ROLES_WEIGHTS };
