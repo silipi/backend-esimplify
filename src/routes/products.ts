@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-import ProductsController from '../controllers/Products';
+import ProductsController from '@/controllers/Products';
 
-import { authorization, schemaValidator } from '../middlewares';
-import { productsSchemas } from '../schemas';
+import { authorization, schemaValidator } from '@/middlewares';
+import { productsSchemas } from '@/schemas';
 
 const controller = ProductsController();
 

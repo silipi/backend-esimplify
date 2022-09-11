@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
-import prismaClient, { excludeFields } from '../database/prismaClient';
+import prismaClient, { excludeFields } from '@/database/prismaClient';
+import AppError from '@/base/AppError';
 
 const ProvidersService = () => {
   const get = async (id: string) => {
@@ -26,7 +27,7 @@ const ProvidersService = () => {
     });
 
     if (cnpjExists) {
-      throw new Error('CNPJ already exists');
+      throw new AppError(400, 'PROVIDER_CNPJ_ALREADY_EXISTS');
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -46,11 +47,11 @@ const ProvidersService = () => {
     });
 
     if (!provider) {
-      throw new Error('Provider not found');
+      throw new AppError(404, 'PROVIDER_NOT_FOUND');
     }
 
     if (data.cnpj && data.cnpj === provider.cnpj) {
-      throw new Error('CNPJ already exists');
+      throw new AppError(400, 'PROVIDER_CNPJ_ALREADY_EXISTS');
     }
 
     const result = await prismaClient.provider.update({

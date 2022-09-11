@@ -1,10 +1,15 @@
-import { Request, Response } from 'express';
-import AuthService from '../services/Auth';
+import { NextFunction, Request, Response } from 'express';
+import AppError from '@/base/AppError';
+import AuthService from '@/services/Auth';
 
 const AuthController = () => {
   const _service = AuthService();
 
-  const loginAdmin = async (req: Request, res: Response) => {
+  const loginAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
     const { username, password } = req.body;
 
     try {
@@ -19,17 +24,52 @@ const AuthController = () => {
           .send();
       }
 
-      return res.status(401).json({
-        message: 'Unauthorized, password incorrect',
-      });
+      throw new AppError(401, 'ADMIN_LOGIN_NOT_AUTHORIZED');
     } catch (error: any) {
-      return res.status(500).json({
-        message: error.message,
-      });
+      next(error);
     }
   };
 
-  return { loginAdmin };
+  const logoutAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      return res.clearCookie('token').send();
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  const checkAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { token } = req.cookies;
+
+      if (!token) {
+        throw new AppError(401, 'ADMIN_LOGIN_NOT_AUTHORIZED');
+      }
+
+      const decoded = await _service.checkAdmin(token);
+
+      if (decoded) {
+        return res.status(200).json({
+          status: 'success',
+          data: decoded,
+        });
+      }
+
+      throw new AppError(401, 'ADMIN_LOGIN_NOT_AUTHORIZED');
+    } catch (error: any) {
+      next(error);
+    }
+  };
+
+  return { loginAdmin, logoutAdmin, checkAdmin };
 };
 
 export default AuthController;

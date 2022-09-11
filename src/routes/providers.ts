@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-import ProvidersController from '../controllers/Providers';
+import ProvidersController from '@/controllers/Providers';
 
-import { authentication, authorization, schemaValidator } from '../middlewares';
-import { providersSchemas } from '../schemas';
+import { authentication, authorization, schemaValidator } from '@/middlewares';
+import { providersSchemas } from '@/schemas';
 
 const controller = ProvidersController();
 

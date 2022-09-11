@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { ROLES_WEIGHTS, ROLES } from '../constants/roles';
+import { ROLES_WEIGHTS, ROLES } from '@/constants/roles';
 import authentication from './authentication';
 
 type Role = keyof typeof ROLES;

@@ -1,4 +1,4 @@
-import prismaClient from '../database/prismaClient';
+import prismaClient from '@/database/prismaClient';
 
 const ProductsService = () => {
   const create = async (data: any) => {

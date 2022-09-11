@@ -1,5 +1,10 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 
+// Converter function to convert Decimal string in JSON to number
+Prisma.Decimal.prototype.toJSON = function () {
+  return this.toNumber();
+};
+
 const prismaClient = new PrismaClient();
 
 export function excludeFields<T, K extends keyof T>(fields: T, omit: K[]) {

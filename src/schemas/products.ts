@@ -13,6 +13,7 @@ const productsSchema = {
       description: Joi.string(),
       color: Joi.string(),
       attributes: Joi.object(),
+      stock: Joi.number(),
       providerId: Joi.string().uuid().required(),
     }).required(),
   },
@@ -26,6 +27,8 @@ const productsSchema = {
       description: Joi.string(),
       color: Joi.string(),
       attributes: Joi.object(),
+      stock: Joi.number(),
+      providerId: Joi.string().uuid(),
     }).required(),
   },
 };
