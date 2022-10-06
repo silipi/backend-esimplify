@@ -40,6 +40,18 @@ const ProvidersController = () => {
 
   const remove = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const products = await prismaClient.product.findMany({
+        where: { providerId: req.params.id },
+      });
+
+      if (products.length > 0) {
+        // throw new AppError(400, 'PROVIDER_HAS_PRODUCTS');
+      }
+
+      await prismaClient.product.deleteMany({
+        where: { providerId: req.params.id },
+      });
+
       const provider = await prismaClient.provider.delete({
         where: { id: req.params.id },
       });

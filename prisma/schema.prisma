@@ -33,5 +33,6 @@ model Product {
   providerId  String
   price       Decimal  @db.Decimal(10, 2)
   stock       Int      @default(0)
+  images      Json?
   provider    Provider @relation(fields: [providerId], references: [id])
 }

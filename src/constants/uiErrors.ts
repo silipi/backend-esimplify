@@ -6,6 +6,7 @@ const UI_ERRORS = {
   PROVIDER_NOT_FOUND: 'provider/not-found',
   PROVIDER_PRODUCTS_NOT_FOUND: 'provider/products-not-found',
   PROVIDER_CNPJ_ALREADY_EXISTS: 'provider/cnpj-already-exists',
+  ERROR_DELETING_IMAGES: 'product/error-deleting-images',
 } as const;
 
 export default UI_ERRORS;

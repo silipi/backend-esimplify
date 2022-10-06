@@ -15,6 +15,7 @@ const providersSchemas = {
       phone: Joi.string().required(),
       email: Joi.string().required(),
       password: Joi.string().min(8).required(),
+      taxes: Joi.any(),
     }).required(),
   },
   put: {

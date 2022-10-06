@@ -20,7 +20,7 @@ export const handleError = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err);
+  console.log({ err });
 
   return res.status(err.status).json({
     status: 'error',
