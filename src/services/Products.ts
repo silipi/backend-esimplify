@@ -57,8 +57,16 @@ const ProductsService = () => {
     if (changeAll) {
       let errorsWhileDeletingImages = false;
       const imagesToDelete = existingProduct.images as any[];
-      for (const image of imagesToDelete) {
-        errorsWhileDeletingImages = !(await deleteS3(image.key));
+      console.log({ imagesToDelete });
+
+      if (imagesToDelete.length > 0) {
+        imagesToDelete.forEach(async (image) => {
+          try {
+            await deleteS3(image);
+          } catch (error) {
+            errorsWhileDeletingImages = true;
+          }
+        });
       }
 
       if (errorsWhileDeletingImages) {
@@ -85,7 +93,7 @@ const ProductsService = () => {
     }
   };
 
-  const removeImage = async (id: string, image: any) => {
+  const removeImage = async (id: string, images: any) => {
     const existingProduct = await prismaClient.product.findUnique({
       where: { id },
     });
@@ -94,21 +102,29 @@ const ProductsService = () => {
       throw new AppError(404, 'PRODUCT_NOT_FOUND');
     }
 
-    const wasDeleted = await deleteS3(image.key);
+    const deletedImages = [];
 
-    if (!wasDeleted) {
-      throw new AppError(500, 'ERROR_DELETING_IMAGES');
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+
+      const wasDeleted = await deleteS3(image.key);
+
+      if (wasDeleted) {
+        deletedImages.push(image);
+      }
     }
 
     // @ts-ignore
-    const newImages = existingProduct.images.filter(
-      (img: any) => img.key !== image.key
-    );
+    const imagesNotDeleted = existingProduct.images.filter((image) => {
+      return !deletedImages.find((deletedImage) => {
+        return deletedImage.key === image.key;
+      });
+    });
 
     const product = await prismaClient.product.update({
       where: { id },
       data: {
-        images: newImages,
+        images: imagesNotDeleted,
       },
     });
 
